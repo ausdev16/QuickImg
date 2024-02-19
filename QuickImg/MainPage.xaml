@@ -12,8 +12,81 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <local:FloatToPercentageWSymbolStringConverter x:Key="ZoomAsPercentStringKey"></local:FloatToPercentageWSymbolStringConverter>
+        <!--<local:FloatToPercentageWSymbolStringConverter x:Key="ZoomAsPercentStringKey"></local:FloatToPercentageWSymbolStringConverter>-->
         <local:FloatToPercentageDoubleConverter x:Key="ZoomAsPercentDoubleKey"></local:FloatToPercentageDoubleConverter>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="{StaticResource ButtonPadding}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="FocusVisualMargin" Value="-3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" BackgroundSizing="{TemplateBinding BackgroundSizing}" Background="Transparent" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="Transparent" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" CornerRadius="{TemplateBinding CornerRadius}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <!--ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"-->
@@ -30,9 +103,16 @@
         </Grid.RowDefinitions>
 
         <CommandBar x:Name="leftCommandBar" HorizontalAlignment="Left" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed" Background="{ThemeResource SystemControlAcrylicElementBrush}" IsOpen="False">
-            <AppBarButton x:Name="openAppBarButton" Icon="OpenFile" Label="Open" Click="openAppBarButton_Click" IsTabStop="True" TabIndex="-1"/>
-            <AppBarButton x:Name="deleteAppBarButton" Icon="Delete" Label="Delete" ToolTipService.ToolTip="Delete" Click="deleteAppBarButton_Click" IsEnabled="False" LabelPosition="Collapsed">
-                <AppBarButton.KeyboardAccelerators>
+            <AppBarButton x:Name="openAppBarButton" Label="Open" Click="openAppBarButton_Click" IsTabStop="True" TabIndex="-1">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE8E5;"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="deleteAppBarButton" Label="Delete" ToolTipService.ToolTip="Delete" Click="deleteAppBarButton_Click" IsEnabled="False" LabelPosition="Collapsed">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                </AppBarButton.Icon>            
+            <AppBarButton.KeyboardAccelerators>
                     <KeyboardAccelerator Key="Delete"/>
                     <KeyboardAccelerator Key="D" Modifiers="Control"/>
                 </AppBarButton.KeyboardAccelerators>
@@ -48,20 +128,24 @@
 
             <AppBarButton x:Name="themeAppBarButton" Label="Light" ToolTipService.ToolTip="Theme" Click="themeAppBarButton_Click" Visibility="Collapsed"> <!--Not sure if I want this on the main toolbar at this stage... or both...-->
                 <AppBarButton.Content>
-                    <FontIcon x:Name="themeFontIcon" FontFamily="Segoe MDL2 Assets" Glyph="&#xF08C;"/>
+                    <FontIcon x:Name="themeFontIcon" FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xF08C;"/>
                 </AppBarButton.Content>
             </AppBarButton>
             <AppBarButton x:Name="fullScreenAppBarButton" Label="Full Screen" ToolTipService.ToolTip="Full Screen" Click="fullScreenAppBarButton_Click" IsEnabled="False">
                 <AppBarButton.Content>
-                    <FontIcon x:Name="fullScreenFontIcon" FontFamily="Segoe MDL2 Assets" Glyph="&#xE740;"/>
+                    <FontIcon x:Name="fullScreenFontIcon" FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE740;"/>
                 </AppBarButton.Content>
             </AppBarButton>
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="settingsAppBarButton" Label="Settings" Icon="Setting" Click="settingsAppBarButton_Click"/>
-                <AppBarSeparator/>
-                <AppBarButton x:Name="feedbackButton" FontFamily="Segoe MDL2 Assets" Label="Feedback" Visibility="Collapsed" Click="feedbackButton_Click">
+                <AppBarButton x:Name="settingsAppBarButton" Label="Settings" Click="settingsAppBarButton_Click">
                     <AppBarButton.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE939;"/>
+                        <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE713;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarSeparator/>
+                <AppBarButton x:Name="feedbackButton" FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Label="Feedback" Visibility="Collapsed" Click="feedbackButton_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE939;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarButton Label="About" Click="aboutAppBarButton_ClickAsync">
@@ -76,9 +160,8 @@
             <SplitView.Pane>
                 <ScrollViewer>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Permitted Folders" Style="{ThemeResource TitleTextBlockStyle}" Margin="8,24,8,0"/>
-                        <TextBlock Text="You can view a single image from any location when you use the Open button. However, to browse other images within the same folder using the Previous/Next buttons, you must add the folder as a permitted location here. The app has access to the Pictures folder by default." TextWrapping="WrapWholeWords" Margin="8,12,8,8"/>
-                        <Button Content="Add Folder" Margin="8,12,8,0" Click="Button_Click" />
+                        <TextBlock Text="Allowed Locations" Style="{ThemeResource TitleTextBlockStyle}" Margin="8,24,8,0"/>
+                        <Button Content="Add Location" Margin="8,12,8,0" Click="Button_Click" ToolTipService.ToolTip="You can view a single image from any location when you use the Open button. However, to open an image via File Explorer, or to browse other images within the same folder using the Previous/Next buttons, you must add the folder as an allowed location here. This app has access to the Pictures folder and removable devices by default."/>
                         <ListBox x:Name="folderListBox" Margin="8,12,8,0">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -93,13 +176,18 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{x:Bind DisplayName}" VerticalAlignment="Center"/>
-                                        <Button Grid.Column="1" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" Click="deleteButton_Click" FontSize="16" Width="44" Height="44"/>
+                                        <Button Grid.Column="1" Background="Transparent" FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Content="&#xE74D;" Click="deleteButton_Click" FontSize="16" Width="44" Height="44"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Rectangle Height="1" HorizontalAlignment="Stretch" Fill="Black" Margin="8,24,8,12"/>
                         <TextBlock Text="View" Style="{ThemeResource TitleTextBlockStyle}" Margin="8,12,8,0"/>
+                        <muxc:RadioButtons x:Name="viewModeRadioButtons" Margin="8,12,8,0" Header="Default View Mode" SelectionChanged="viewModeRadioButtons_SelectionChanged">
+                            <x:String>Exact Size</x:String>
+                            <x:String>Fit</x:String>
+                            <x:String>Last Used</x:String>
+                        </muxc:RadioButtons>
                         <ToggleSwitch x:Name="animationsToggleSwitch" Header="Animations" IsOn="True" Margin="8,12,8,0" Toggled="animationsToggleSwitch_Toggled"/>                    
                         <ToggleSwitch x:Name="statusBarToggleSwitch" Header="Status Bar" IsOn="True" Margin="8,12,8,0" Toggled="statusBarToggleSwitch_Toggled" />
                         <ToggleSwitch x:Name="exactPixelsToggleSwitch" Header="Override DPI for Actual Size" IsOn="False" Margin="8,12,8,0" Toggled="exactPixelsToggleSwitch_Toggled"/>
@@ -122,7 +210,7 @@
                     <ColumnDefinition Width="48"/>
                 </Grid.ColumnDefinitions>
 
-                <ScrollViewer x:Name="scrollViewer" Grid.Row="1" Grid.ColumnSpan="3" Background="{ThemeResource SystemControlAcrylicElementBrush}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" MaxZoomFactor="5" MinZoomFactor=".2" ZoomMode="Enabled" SizeChanged="scrollViewer_SizeChanged"><!-- ViewChanged="scrollViewer_ViewChanged"--> 
+                <ScrollViewer x:Name="scrollViewer" Grid.Row="1" Grid.ColumnSpan="3" Background="{ThemeResource SystemControlAcrylicElementBrush}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" MaxZoomFactor="5" MinZoomFactor=".2" ZoomMode="Enabled" SizeChanged="scrollViewer_SizeChanged" ViewChanged="scrollViewer_ViewChanged" >
                     <controls:LayoutTransformControl x:Name="layoutTransform" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" SizeChanged="layoutTransform_SizeChanged">
                         <controls:LayoutTransformControl.Resources>
                             <Storyboard x:Name="rotateStoryboard" Completed="rotateStoryboard_Completed">
@@ -138,62 +226,18 @@
 
                 <muxc:ProgressRing x:Name="progressRing" Grid.Row="1" Grid.Column="1" Width="48" Height="48" HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="False"/>
 
-                <Button Grid.Row="1" x:Name="previousButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" Click="previousButton_Click">
-                    <Button.Resources>
-                        <ResourceDictionary>
-                            <ResourceDictionary.ThemeDictionaries>
-                                <ResourceDictionary x:Key="Dark">
-                                    <SolidColorBrush x:Key="ButtonForeground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
-                                </ResourceDictionary>
-                                <ResourceDictionary x:Key="Light">
-                                    <SolidColorBrush x:Key="ButtonForeground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
-                                </ResourceDictionary>
-                            </ResourceDictionary.ThemeDictionaries>
-                        </ResourceDictionary>
-                    </Button.Resources>
+                <Button Style="{StaticResource ButtonStyle}" Grid.Row="1" x:Name="previousButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" Click="previousButton_Click" Visibility="Collapsed">                    
                     <Button.Content>
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="32" Text="&#xE76B;"/>
+                        <TextBlock FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" FontSize="32" Text="&#xE76B;"/>
                     </Button.Content>
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="Left"/>
                     </Button.KeyboardAccelerators>  
                 </Button>
 
-                <Button Grid.Row="1" Grid.Column="2" x:Name="nextButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" Click="nextButton_Click">
-                    <Button.Resources>
-                        <ResourceDictionary>
-                            <ResourceDictionary.ThemeDictionaries>
-                                <ResourceDictionary x:Key="Dark">
-                                    <SolidColorBrush x:Key="ButtonForeground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
-                                </ResourceDictionary>
-                                <ResourceDictionary x:Key="Light">
-                                    <SolidColorBrush x:Key="ButtonForeground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackground" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="Transparent"/>
-                                    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
-                                </ResourceDictionary>
-                            </ResourceDictionary.ThemeDictionaries>
-                        </ResourceDictionary>
-                    </Button.Resources>
+                <Button Style="{StaticResource ButtonStyle}" Grid.Row="1" Grid.Column="2" x:Name="nextButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" Click="nextButton_Click" Visibility="Collapsed">                    
                     <Button.Content>
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="32" Text="&#xE76C;"/>
+                        <TextBlock FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" FontSize="32" Text="&#xE76C;"/>
                     </Button.Content>
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="Right"/>
@@ -206,15 +250,18 @@
             <CommandBar x:Name="imageCommandBar" HorizontalAlignment="Center" IsOpen="False" OverflowButtonVisibility="Collapsed" DefaultLabelPosition="Collapsed" Background="{ThemeResource SystemControlAcrylicElementBrush}">
                 <AppBarButton x:Name="zoomToActualSizeAppBarButton" Label="Zoom to Actual Size" ToolTipService.ToolTip="Zoom to Actual Size" Click="zoomToActualSizeAppBarButton_Click" IsEnabled="False">
                     <AppBarButton.Icon>
-                        <BitmapIcon UriSource="ms-appx:///Assets/test4.png"/>
+                        <BitmapIcon UriSource="ms-appx:///Assets/ActualSize2.png"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarButton x:Name="fitToWindowAppBarButton" Label="Fit to Window" ToolTipService.ToolTip="Fit to Window" Click="fitToWindowAppBarButton_Click" IsEnabled="False">
                     <AppBarButton.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE9A6;"/>
+                        <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE9A6;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton x:Name="zoomAppBarButton" Icon="ZoomIn" Label="Zoom" ToolTipService.ToolTip="Zoom" IsEnabled="False" Click="zoomAppBarButton_Click">
+                <AppBarButton x:Name="zoomAppBarButton" Label="Zoom" ToolTipService.ToolTip="Zoom" IsEnabled="False" Click="zoomAppBarButton_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE8A3;"/>
+                    </AppBarButton.Icon>
                     <AppBarButton.Flyout>
                         <Flyout>
                             <Slider x:Name="zoomSlider" Minimum="0" Maximum="100" TickFrequency="10" TickPlacement="Outside" IsThumbToolTipEnabled="False" Width="256" ManipulationMode="All" ManipulationDelta="zoomSlider_ManipulationDelta" ManipulationCompleted="zoomSlider_ManipulationCompleted" IsTapEnabled="True" Tapped="zoomSlider_Tapped"/>
@@ -223,7 +270,7 @@
                 </AppBarButton>
                 <AppBarButton x:Name="rotateLeftAppBarButton" Label="Rotate Left" ToolTipService.ToolTip="Rotate Left" Click="rotateLeftAppBarButton_Click" IsEnabled="False">
                     <AppBarButton.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7AD;" RenderTransformOrigin="0.5,0.5">
+                        <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE7AD;" RenderTransformOrigin="0.5,0.5">
                             <FontIcon.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform ScaleX="-1"/>
@@ -238,7 +285,10 @@
                         <KeyboardAccelerator Key="Left" Modifiers="Control"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
-                <AppBarButton x:Name="rotateRightAppBarButton" Icon="Rotate" Label="Rotate Right" ToolTipService.ToolTip="Rotate Right" Click="rotateRightAppBarButton_Click" IsEnabled="False">
+                <AppBarButton x:Name="rotateRightAppBarButton" Label="Rotate Right" ToolTipService.ToolTip="Rotate Right" Click="rotateRightAppBarButton_Click" IsEnabled="False">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="/Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE7AD;"/>
+                    </AppBarButton.Icon>
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator Key="Right" Modifiers="Control"/>
                     </AppBarButton.KeyboardAccelerators>
@@ -269,14 +319,15 @@
             <Rectangle Grid.Column="5" Width="1" VerticalAlignment="Stretch" Fill="{ThemeResource SystemBaseLowColor}" Margin="32,0,4,0"/>
             <TextBlock x:Name="rotationTextBlock" Grid.Column="6" Style="{ThemeResource CaptionTextBlockStyle}" Text="0&#186;"/>
             <Rectangle Grid.Column="7" Width="1" VerticalAlignment="Stretch" Fill="{ThemeResource SystemBaseLowColor}" HorizontalAlignment="Right" Margin="32,0,4,0"/>
-            <TextBlock x:Name="zoomTextBlock" Grid.Column="8" Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind scrollViewer.ZoomFactor, Mode=OneWay, Converter={StaticResource ZoomAsPercentStringKey}}"/>
+            <TextBlock x:Name="zoomTextBlock" Grid.Column="8" Style="{ThemeResource CaptionTextBlockStyle}" Text="100%"/>
+            <!--{x:Bind scrollViewer.ZoomFactor, Mode=OneWay, Converter={StaticResource ZoomAsPercentStringKey}, ConverterParameter={Binding DPIOverrideFraction}}-->
             <Rectangle Grid.Column="9" Width="1" VerticalAlignment="Stretch" Fill="{ThemeResource SystemBaseLowColor}" Margin="32,0,4,0"/>
             <TextBlock x:Name="displayedSizeTextBlock" Grid.Column="10" Style="{ThemeResource CaptionTextBlockStyle}" Text="0 x 0" Margin="0,0,30,0"/>
             <Rectangle x:Name="hideRectangle" Grid.ColumnSpan="11" Fill="{ThemeResource SystemControlAcrylicElementBrush}" Margin="-2" Visibility="Collapsed"/>
         </Grid>
 
         <ContentDialog x:Name="aboutContentDialog"
-           PrimaryButtonText="OK" IsPrimaryButtonEnabled="True">
+           PrimaryButtonText="OK" IsPrimaryButtonEnabled="True" Visibility="Collapsed">
             <ContentDialog.TitleTemplate>
                 <DataTemplate>
                     <TextBlock Text="About"/>
@@ -290,6 +341,33 @@
                 <HyperlinkButton Content="Report Bug" NavigateUri="mailto:ausdev@outlook.com.au"/>
             </StackPanel>
         </ContentDialog>
-        
+
+        <ContentDialog x:Name="DeleteDialog"
+           PrimaryButtonText="Delete"
+           CloseButtonText="Cancel"
+           Opened="DeleteDialog_Opened">
+            <ContentDialog.TitleTemplate>
+                <DataTemplate>
+                    <TextBlock>Delete Image File?</TextBlock>
+                </DataTemplate>
+            </ContentDialog.TitleTemplate>
+            <StackPanel>
+                <TextBlock TextWrapping="WrapWholeWords">If you delete this image, you may not be able to recover it. Do you want to delete it?</TextBlock>                
+                <CheckBox Margin="0,4,0,0" IsChecked="{x:Bind doNotConfirmDelete}" x:Name="ConfirmDeleteCheckBox" Content="Do not ask again this session"
+              Checked="ConfirmDeleteCheckBox_Checked" Unchecked="ConfirmDeleteCheckBox_Unchecked">
+                    <ToolTipService.ToolTip>
+                        <TextBlock TextWrapping="WrapWholeWords" Foreground="Red">                            
+                            <Run>Windows determines whether or not file is deleted permanently or moved to the Recycle Bin.</Run><LineBreak/>
+                            <LineBreak/>
+                            <Run>Typically, image files stored in a standard Library lolcation such as "My Pictures", "My Documents", etc., will be deleted permenatly.</Run><LineBreak/>
+                            <Run>Image files deleted from other locations may be moved to the Recycle Bin.</Run><LineBreak/>
+                            <LineBreak/>
+                            <Run>As such, be careful when deleting files as this action may not be reverseable!</Run>
+                        </TextBlock>
+                    </ToolTipService.ToolTip>
+                </CheckBox>
+            </StackPanel>
+        </ContentDialog>
+
     </Grid>
 </Page>

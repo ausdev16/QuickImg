@@ -29,12 +29,22 @@ namespace QuickImg
     }
 
     /// <summary>
-    /// The current View Mode for the Scroll Viewer / Layout Transform (used in the Image Container to support rotation).
+    /// The current View Mode for the Scroll Viewer / Layout Transform (used as the Image Container to support rotation).
     /// </summary>
     public enum ViewMode
     {
         ActualPixels,
         Fit,
         CustomZoom
+    }
+
+    /// <summary>
+    /// The View Mode to use on initial startup
+    /// </summary>
+    public enum InitialViewMode
+    {
+        ActualSize,
+        Fit,
+        LastUsed
     }
 }

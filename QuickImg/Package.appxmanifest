@@ -8,8 +8,8 @@
 
   <Identity
     Name="9020AusDeveloper.QuickImg"
-    Publisher="CN=AusDev"
-    Version="2.1.0.0" />
+    Publisher="CN=ED21DECD-21AA-493C-8234-F93AA597A7F2"
+    Version="2.4.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="b142edc0-f824-4652-a6e1-c5a181db6ca6" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -89,5 +89,6 @@
   </Applications>
 
   <Capabilities>
-    <uap:Capability Name="picturesLibrary"/></Capabilities>
+    <uap:Capability Name="picturesLibrary"/>
+    <uap:Capability Name="removableStorage"/></Capabilities>
 </Package>

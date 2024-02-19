@@ -11,9 +11,28 @@ namespace QuickImg
 {
     public static class SettingsHelper
     {
-        // The main point of this class is to cut down on code in MainPage.cs
-        // Related to loading settings which is lines of code heavy
-        // Despite being straight forward.
+        public static ViewMode GetSavedViewMode(ApplicationDataContainer localSettings)
+        {
+            int? viewModeAsInt;
+
+            viewModeAsInt = (int)localSettings.Values["SavedViewMode"];
+            if (viewModeAsInt == null)
+            {
+                localSettings.Values["SavedViewMode"] = (int)ViewMode.Fit;
+
+                return ViewMode.Fit;
+            }
+            else
+            {
+                return (ViewMode)viewModeAsInt;
+            }
+        }
+
+        public static void SetSavedViewMode(ApplicationDataContainer localSettings, ViewMode viewMode)
+        {
+            localSettings.Values["SavedViewMode"] = (int)viewMode;
+        }
+
         public static bool GetDisableAnimation(ApplicationDataContainer localSettings)
         {
             bool? disableAnimation;
@@ -95,6 +114,28 @@ namespace QuickImg
         public static void SetTheme(ApplicationDataContainer localSettings, Theme theme)
         {
             localSettings.Values["Theme"] = (int)theme;
+        }
+
+        public static InitialViewMode GetInitialViewMode(ApplicationDataContainer localSettings)
+        {
+            int? initialViewMode;
+
+            initialViewMode = (int?)localSettings.Values["InitialViewMode"];
+
+            if (initialViewMode == null)
+            {
+                localSettings.Values["InitialViewMode"] = (int)InitialViewMode.Fit;
+                return InitialViewMode.Fit;
+            }
+            else
+            {
+                return (InitialViewMode)initialViewMode;
+            }
+        }
+
+        public static void SetInitialViewMode(ApplicationDataContainer localSettings, InitialViewMode initialViewMode)
+        {
+            localSettings.Values["InitialViewMode"] = (int)initialViewMode;
         }
     }
 }
