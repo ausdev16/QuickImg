@@ -878,7 +878,7 @@ namespace QuickImg
             rotateAnimation.From = oldAngle;
             rotateAnimation.To = newAngle;
 
-            rotationTextBlock.Text = newAngle.ToString() + "°";
+            //rotationTextBlock.Text = newAngle.ToString() + "°";
 
             enableRotateButtons(false);
             scrollViewer.MinZoomFactor = 0.1f;
@@ -1041,6 +1041,7 @@ namespace QuickImg
             bool animationOverride;
 
             ClockState state = rotateStoryboard.GetCurrentState();
+            System.Diagnostics.Debug.WriteLine("Clockstate: " + state.ToString());
             if (disableAnimation || justLoaded || state == ClockState.Active)
             {
                 animationOverride = true;
@@ -1054,15 +1055,20 @@ namespace QuickImg
             {
                 animationOverride = false;
             }
+            System.Diagnostics.Debug.WriteLine("Animate Override: " + animationOverride.ToString());
 
             // If we don't set this to zero, e.g. null instead, the animation is a bit jerky due to delayed calucations,
             // Causing the preivous offset to be off.
             scrollViewer.ChangeView(0, 0, (float)smallestRatio, animationOverride);
-
-            zoomTextBlock.Text = Math.Round(smallestRatio / DPIOverrideFraction * 100).ToString() + "%";
-            //displayedSizeTextBlock.Text = Math.Floor(imageWidth * smallestRatio) + " x " + Math.Floor(imageHeight * smallestRatio);
-            displayedSizeTextBlock.Text = Math.Floor(imageWidth * smallestRatio / DPIOverrideFraction) + " x " + Math.Floor(imageHeight * smallestRatio / DPIOverrideFraction);
-
+            
+            // We only want to update the Zoom % and displayed size if the animation is over (or there is no animation).
+            if (state == ClockState.Filling)
+            {
+                System.Diagnostics.Debug.WriteLine("Updating Zoom Percent & Displayed Size...");
+                zoomTextBlock.Text = Math.Round(smallestRatio / DPIOverrideFraction * 100).ToString() + "%";
+                displayedSizeTextBlock.Text = Math.Floor(imageWidth * smallestRatio / DPIOverrideFraction) + " x " + Math.Floor(imageHeight * smallestRatio / DPIOverrideFraction);
+            }
+            
             viewMode = ViewMode.Fit;
         }
 
@@ -1491,6 +1497,8 @@ namespace QuickImg
             {
                 enableRotateButtons(true);
             }
+
+            rotationTextBlock.Text = newAngle.ToString() + "°";
         }
 
         /// <summary>
